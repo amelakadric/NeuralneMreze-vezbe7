@@ -59,6 +59,8 @@ for img, lab in ulaz_trening.take(1):
 model = Sequential([
     data_aug,
 
+    layers.Rescaling(1./255),
+
     layers.Conv2D(16, 3, activation='relu',  padding='same'),
     layers.MaxPooling2D(2, strides=2),
 

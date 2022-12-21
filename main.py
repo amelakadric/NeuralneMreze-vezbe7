@@ -41,8 +41,25 @@ for img, lab in ulaz_trening.take(1):
 from keras import Sequential
 from keras import layers
 
+data_aug=Sequential([
+    layers.RandomFlip('horizontal', input_shape=(64, 64, 3)),
+    layers.RandomRotation(0.25),
+    layers.RandomZoom(0.3)
+])
+
+for img, lab in ulaz_trening.take(1):
+    plt.figure()
+    for k in range(10):
+        img_aug = data_aug(img)
+        plt.subplot(2, 5, k+1)
+        plt.imshow(img_aug[0].numpy().astype('uint8'))
+        plt.title(classes[lab[0]])
+    plt.show()
+
 model = Sequential([
-    layers.Conv2D(16, 3, activation='relu', input_shape=(64, 64, 3), padding='same'),
+    data_aug,
+
+    layers.Conv2D(16, 3, activation='relu',  padding='same'),
     layers.MaxPooling2D(2, strides=2),
 
     layers.Conv2D(32, 3, activation='relu', padding='same'),
